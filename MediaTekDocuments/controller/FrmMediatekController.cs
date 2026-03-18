@@ -76,7 +76,6 @@ namespace MediaTekDocuments.controller
             return access.GetAllPublics();
         }
 
-
         /// <summary>
         /// récupère les exemplaires d'une revue
         /// </summary>
@@ -95,6 +94,96 @@ namespace MediaTekDocuments.controller
         public bool CreerExemplaire(Exemplaire exemplaire)
         {
             return access.CreerExemplaire(exemplaire);
+        }
+
+        /// <summary>
+        /// Crée un livre dans la bdd
+        /// </summary>
+        /// <param name="livre">L'objet Livre concerné</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerLivre(Livre livre)
+        {
+            return access.CreerLivre(livre);
+        }
+
+        /// <summary>
+        /// Modifie un livre dans la bdd
+        /// </summary>
+        /// <param name="livre">L'objet Livre concerné</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifierLivre(Livre livre)
+        {
+            return access.ModifierLivre(livre);
+        }
+
+        /// <summary>
+        /// Supprime un livre dans la bdd
+        /// </summary>
+        /// <param name="livre">L'objet Livre concerné</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprimerLivre(Livre livre)
+        {
+            return access.SupprimerLivre(livre);
+        }
+
+        /// <summary>
+        /// Crée un DVD dans la bdd
+        /// </summary>
+        /// <param name="dvd">L'objet Dvd concerné</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerDvd(Dvd dvd)
+        {
+            return access.CreerDvd(dvd);
+        }
+
+        /// <summary>
+        /// Modifie un DVD dans la bdd
+        /// </summary>
+        /// <param name="dvd">L'objet Dvd concerné</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifierDvd(Dvd dvd)
+        {
+            return access.ModifierDvd(dvd);
+        }
+
+        /// <summary>
+        /// Supprime un DVD dans la bdd
+        /// </summary>
+        /// <param name="dvd">L'objet Dvd concerné</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprimerDvd(Dvd dvd)
+        {
+            return access.SupprimerDvd(dvd);
+        }
+
+        /// <summary>
+        /// Crée une revue dans la bdd
+        /// </summary>
+        /// <param name="revue">L'objet Revue concerné</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerRevue(Revue revue)
+        {
+            return access.CreerRevue(revue);
+        }
+
+        /// <summary>
+        /// Modifie une revue dans la bdd
+        /// </summary>
+        /// <param name="revue">L'objet Revue concerné</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifierRevue(Revue revue)
+        {
+            return access.ModifierRevue(revue);
+        }
+
+        /// <summary>
+        /// Supprime une revue dans la bdd
+        /// </summary>
+        /// <param name="revue">L'objet Revue concerné</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprimerRevue(Revue revue)
+        {
+            return access.SupprimerRevue(revue);
         }
     }
 }
