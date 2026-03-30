@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using MediaTekDocuments.dal;
 using MediaTekDocuments.model;
-using MediaTekDocuments.dal;
+using System;
+using System.Collections.Generic;
 
 namespace MediaTekDocuments.controller
 {
     /// <summary>
     /// Contrôleur lié à FrmMediatek
     /// </summary>
-    class FrmMediatekController
+    public class FrmMediatekController
     {
         /// <summary>
         /// Objet d'accès aux données
@@ -184,6 +185,149 @@ namespace MediaTekDocuments.controller
         public bool SupprimerRevue(Revue revue)
         {
             return access.SupprimerRevue(revue);
+        }
+
+        /// <summary>
+        /// getter sur la liste des étapes de suivi
+        /// </summary>
+        /// <returns>Liste d'objets Suivi</returns>
+        public List<Suivi> GetAllSuivi()
+        {
+            return access.GetAllSuivi();
+        }
+
+        /// <summary>
+        /// getter sur les commandes d'un livre ou DVD
+        /// </summary>
+        /// <param name="idLivreDvd">id du livre ou DVD concerné</param>
+        /// <returns>Liste d'objets CommandeDocument</returns>
+        public List<CommandeDocument> GetCommandesLivreDvd(string idLivreDvd)
+        {
+            return access.GetCommandesLivreDvd(idLivreDvd);
+        }
+
+        /// <summary>
+        /// Crée une commande de livre ou DVD dans la bdd
+        /// </summary>
+        /// <param name="commande">L'objet CommandeDocument concerné</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerCommandeLivreDvd(CommandeDocument commande)
+        {
+            return access.CreerCommandeLivreDvd(commande);
+        }
+
+        /// <summary>
+        /// Modifie le suivi d'une commande de livre ou DVD dans la bdd
+        /// </summary>
+        /// <param name="commande">L'objet CommandeDocument concerné</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifierSuiviCommande(CommandeDocument commande)
+        {
+            return access.ModifierSuiviCommande(commande);
+        }
+
+        /// <summary>
+        /// Supprime une commande de livre ou DVD dans la bdd
+        /// </summary>
+        /// <param name="commande">L'objet CommandeDocument concerné</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprimerCommandeLivreDvd(CommandeDocument commande)
+        {
+            return access.SupprimerCommandeLivreDvd(commande);
+        }
+
+        /// <summary>
+        /// Retourne les abonnements d'une revue
+        /// </summary>
+        public List<Abonnement> GetAbonnementsRevue(string idRevue)
+        {
+            return access.GetAbonnementsRevue(idRevue);
+        }
+
+        /// <summary>
+        /// Crée un abonnement (nouvel abonnement ou renouvellement)
+        /// </summary>
+        public bool CreerAbonnement(Abonnement abonnement)
+        {
+            return access.CreerAbonnement(abonnement);
+        }
+
+        /// <summary>
+        /// Supprime un abonnement si aucun exemplaire n'y est rattaché
+        /// </summary>
+        public bool SupprimerAbonnement(Abonnement abonnement, List<Exemplaire> exemplairesRevue)
+        {
+            foreach (Exemplaire exemplaire in exemplairesRevue)
+            {
+                DateTime dateParution = exemplaire.DateAchat;
+                DateTime dateCommande = DateTime.Parse(abonnement.DateCommande);
+                DateTime dateFin = DateTime.Parse(abonnement.DateFinAbonnement);
+
+                if (ParutionDansAbonnement(dateCommande, dateFin, dateParution))
+                {
+                    return false; // exemplaire rattaché → suppression interdite
+                }
+            }
+            return access.SupprimerAbonnement(abonnement);
+        }
+
+        /// <summary>
+        /// Retourne true si dateParution est comprise entre dateCommande et dateFinAbonnement
+        /// Méthode testable unitairement (requise par la tâche)
+        /// </summary>
+        public bool ParutionDansAbonnement(DateTime dateCommande,
+                                           DateTime dateFinAbonnement,
+                                           DateTime dateParution)
+        {
+            return dateParution >= dateCommande && dateParution <= dateFinAbonnement;
+        }
+
+        /// <summary>
+        /// Retourne les revues dont l'abonnement expire dans moins de 30 jours
+        /// </summary>
+        public List<Abonnement> GetAbonnementsExpiresBientot()
+        {
+            return access.GetAbonnementsExpiresBientot();
+        }
+
+        /// <summary>
+        /// Retourne les exemplaires d'un livre ou DVD
+        /// </summary>
+        public List<Exemplaire> GetExemplairesLivreDvd(string idLivreDvd)
+        {
+            return access.GetExemplairesLivreDvd(idLivreDvd);
+        }
+
+        /// <summary>
+        /// Modifie l'état d'un exemplaire
+        /// </summary>
+        public bool ModifierEtatExemplaire(Exemplaire exemplaire)
+        {
+            return access.ModifierEtatExemplaire(exemplaire);
+        }
+
+        /// <summary>
+        /// Supprime un exemplaire
+        /// </summary>
+        public bool SupprimerExemplaire(Exemplaire exemplaire)
+        {
+            return access.SupprimerExemplaire(exemplaire);
+        }
+
+        /// <summary>
+        /// Retourne tous les états
+        /// </summary>
+        public List<Categorie> GetAllEtats()
+        {
+            return access.GetAllEtats();
+        }
+
+        /// <summary>
+        /// Retourne un utilisateur par son login
+        /// </summary>
+        public Utilisateur GetUtilisateur(string login)
+        {
+            return access.GetUtilisateur(login);
         }
     }
 }

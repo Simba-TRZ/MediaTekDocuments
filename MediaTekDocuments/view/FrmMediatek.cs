@@ -19,19 +19,34 @@ namespace MediaTekDocuments.view
         private readonly BindingSource bdgGenres = new BindingSource();
         private readonly BindingSource bdgPublics = new BindingSource();
         private readonly BindingSource bdgRayons = new BindingSource();
-
+        private Utilisateur utilisateurConnecte;
         /// <summary>
         /// Constructeur : création du contrôleur lié à ce formulaire
         /// </summary>
-        internal FrmMediatek()
+        internal FrmMediatek(Utilisateur utilisateur)
         {
             InitializeComponent();
             this.controller = new FrmMediatekController();
+            this.utilisateurConnecte = utilisateur;
+            AppliquerDroits();
             try
             {
-                AfficherAlerteAbonnements();
+                if (utilisateur.IdService == "00003")
+                    AfficherAlerteAbonnements();
             }
             catch { }
+        }
+
+        private void AppliquerDroits()
+        {
+            if (utilisateurConnecte.IdService == "00001")
+            {
+                // Service Prêt : pas accès aux commandes ni abonnements
+                btnCommandesLivres.Visible = false;
+                btnCommandesDvd.Visible = false;
+                btnAbonnementsRevues.Visible = false;
+            }
+            // Service Commandes (00003) : accès complet, rien à cacher
         }
 
         /// <summary>

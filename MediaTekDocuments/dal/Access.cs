@@ -637,5 +637,17 @@ namespace MediaTekDocuments.dal
             List<Etat> lesEtats = TraitementRecup<Etat>(GET, "etat", null);
             return lesEtats.Select(e => (Categorie)e).ToList();
         }
+
+        /// <summary>
+        /// Retourne un utilisateur par son login
+        /// </summary>
+        public Utilisateur GetUtilisateur(string login)
+        {
+            String jsonLogin = convertToJson("login", login);
+            List<Utilisateur> lesUtilisateurs = TraitementRecup<Utilisateur>(GET, "utilisateur/" + jsonLogin, null);
+            if (lesUtilisateurs != null && lesUtilisateurs.Count > 0)
+                return lesUtilisateurs[0];
+            return null;
+        }
     }
 }
