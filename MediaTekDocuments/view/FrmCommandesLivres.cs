@@ -7,32 +7,13 @@ using System.Linq;
 
 namespace MediaTekDocuments.view
 {
-    /// <summary>
-    /// Fenêtre de gestion des commandes de livres
-    /// </summary>
     public partial class FrmCommandesLivres : Form
     {
-        /// <summary>
-        /// Contrôleur lié à ce formulaire
-        /// </summary>
         private readonly FrmMediatekController controller;
-        /// <summary>
-        /// Liste des commandes du livre sélectionné
-        /// </summary>
         private List<CommandeDocument> lesCommandes = new List<CommandeDocument>();
-        /// <summary>
-        /// Binding source pour la liste des commandes
-        /// </summary>
         private readonly BindingSource bdgCommandesListe = new BindingSource();
-        /// <summary>
-        /// Binding source pour le combo suivi
-        /// </summary>
         private readonly BindingSource bdgSuivi = new BindingSource();
 
-        /// <summary>
-        /// Constructeur : récupère le contrôleur
-        /// </summary>
-        /// <param name="controller">le contrôleur</param>
         public FrmCommandesLivres(FrmMediatekController controller)
         {
             InitializeComponent();
@@ -40,9 +21,6 @@ namespace MediaTekDocuments.view
             RemplirComboSuivi();
         }
 
-        /// <summary>
-        /// Remplit le combo des étapes de suivi
-        /// </summary>
         private void RemplirComboSuivi()
         {
             List<Suivi> lesSuivi = controller.GetAllSuivi();
@@ -53,11 +31,6 @@ namespace MediaTekDocuments.view
             cbxSuivi.SelectedIndex = -1;
         }
 
-        /// <summary>
-        /// Recherche et affiche les commandes du livre saisi
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void BtnRechercherLivre_Click(object sender, EventArgs e)
         {
             if (!txbNumeroLivre.Text.Equals(""))
@@ -71,10 +44,6 @@ namespace MediaTekDocuments.view
             }
         }
 
-        /// <summary>
-        /// Remplit le datagrid avec la liste des commandes
-        /// </summary>
-        /// <param name="commandes">liste des commandes</param>
         private void RemplirCommandesListe(List<CommandeDocument> commandes)
         {
             bdgCommandesListe.DataSource = commandes;
@@ -86,11 +55,6 @@ namespace MediaTekDocuments.view
                 dgvCommandesListe.Columns["IdSuivi"].Visible = false;
         }
 
-        /// <summary>
-        /// Sur la sélection d'une commande, affiche son suivi dans le combo
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void DgvCommandesListe_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvCommandesListe.CurrentCell != null)
@@ -100,15 +64,13 @@ namespace MediaTekDocuments.view
                     CommandeDocument commande = (CommandeDocument)bdgCommandesListe.List[bdgCommandesListe.Position];
                     cbxSuivi.SelectedValue = commande.IdSuivi;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erreur sélection commande : " + ex.Message);
+                }
             }
         }
 
-        /// <summary>
-        /// Tri sur les colonnes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void DgvCommandesListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             string titreColonne = dgvCommandesListe.Columns[e.ColumnIndex].HeaderText;
@@ -132,11 +94,6 @@ namespace MediaTekDocuments.view
                 RemplirCommandesListe(sortedList);
         }
 
-        /// <summary>
-        /// Enregistre une nouvelle commande
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void BtnValiderCommande_Click(object sender, EventArgs e)
         {
             if (txbNumeroLivre.Text.Equals(""))
@@ -174,17 +131,13 @@ namespace MediaTekDocuments.view
                     MessageBox.Show("Erreur lors de l'enregistrement", "Erreur");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("Erreur saisie : " + ex.Message);
                 MessageBox.Show("Montant et nombre d'exemplaires doivent être numériques", "Erreur");
             }
         }
 
-        /// <summary>
-        /// Modifie le suivi de la commande sélectionnée
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void BtnModifierSuivi_Click(object sender, EventArgs e)
         {
             if (bdgCommandesListe.Current == null)
@@ -199,8 +152,6 @@ namespace MediaTekDocuments.view
             }
             CommandeDocument commande = (CommandeDocument)bdgCommandesListe.Current;
             Suivi nouveauSuivi = (Suivi)cbxSuivi.SelectedItem;
-
-            // Règles de gestion
             if ((commande.IdSuivi == "00003" || commande.IdSuivi == "00004") &&
                 (nouveauSuivi.Id == "00001" || nouveauSuivi.Id == "00002"))
             {
@@ -212,7 +163,6 @@ namespace MediaTekDocuments.view
                 MessageBox.Show("Une commande ne peut être réglée que si elle est livrée", "Erreur");
                 return;
             }
-
             commande.IdSuivi = nouveauSuivi.Id;
             if (controller.ModifierSuiviCommande(commande))
             {
@@ -226,11 +176,6 @@ namespace MediaTekDocuments.view
             }
         }
 
-        /// <summary>
-        /// Supprime la commande sélectionnée si elle n'est pas livrée
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void BtnSupprimerCommande_Click(object sender, EventArgs e)
         {
             if (bdgCommandesListe.Current == null)

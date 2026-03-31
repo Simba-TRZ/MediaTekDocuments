@@ -18,17 +18,12 @@ namespace MediaTekDocuments.view
             InitializeComponent();
             this.controller = controller;
             this.revue = revue;
-            // Afficher les infos de la revue
             txbNumero.Text = revue.Id;
             txbTitre.Text = revue.Titre;
             txbPeriodicite.Text = revue.Periodicite;
-            // Charger les abonnements
             ChargerAbonnements();
         }
 
-        /// <summary>
-        /// Charge et affiche la liste des abonnements de la revue
-        /// </summary>
         private void ChargerAbonnements()
         {
             lesAbonnements = controller.GetAbonnementsRevue(revue.Id);
@@ -41,9 +36,6 @@ namespace MediaTekDocuments.view
                 dgvAbonnements.Columns["Id"].Visible = false;
         }
 
-        /// <summary>
-        /// Tri sur les colonnes de la liste
-        /// </summary>
         private void DgvAbonnements_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             string col = dgvAbonnements.Columns[e.ColumnIndex].HeaderText;
@@ -68,9 +60,6 @@ namespace MediaTekDocuments.view
             bdgAbonnements.DataSource = sorted;
         }
 
-        /// <summary>
-        /// Enregistre un nouvel abonnement
-        /// </summary>
         private void BtnAjouter_Click(object sender, EventArgs e)
         {
             if (txbNouvelId.Text.Equals("") || txbMontant.Text.Equals(""))
@@ -107,9 +96,6 @@ namespace MediaTekDocuments.view
             }
         }
 
-        /// <summary>
-        /// Supprime l'abonnement sélectionné si aucun exemplaire n'y est rattaché
-        /// </summary>
         private void BtnSupprimer_Click(object sender, EventArgs e)
         {
             if (bdgAbonnements.Current == null)
@@ -133,9 +119,6 @@ namespace MediaTekDocuments.view
             }
         }
 
-        /// <summary>
-        /// Vide les champs de saisie
-        /// </summary>
         private void ViderSaisie()
         {
             txbNouvelId.Text = "";

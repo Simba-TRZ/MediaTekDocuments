@@ -64,7 +64,10 @@ namespace MediaTekDocuments.view
                     CommandeDocument commande = (CommandeDocument)bdgCommandesListe.List[bdgCommandesListe.Position];
                     cbxSuivi.SelectedValue = commande.IdSuivi;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Erreur sélection commande : " + ex.Message);
+                }
             }
         }
 
@@ -128,8 +131,9 @@ namespace MediaTekDocuments.view
                     MessageBox.Show("Erreur lors de l'enregistrement", "Erreur");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("Erreur saisie : " + ex.Message);
                 MessageBox.Show("Montant et nombre d'exemplaires doivent être numériques", "Erreur");
             }
         }
@@ -148,7 +152,6 @@ namespace MediaTekDocuments.view
             }
             CommandeDocument commande = (CommandeDocument)bdgCommandesListe.Current;
             Suivi nouveauSuivi = (Suivi)cbxSuivi.SelectedItem;
-
             if ((commande.IdSuivi == "00003" || commande.IdSuivi == "00004") &&
                 (nouveauSuivi.Id == "00001" || nouveauSuivi.Id == "00002"))
             {
@@ -160,7 +163,6 @@ namespace MediaTekDocuments.view
                 MessageBox.Show("Une commande ne peut être réglée que si elle est livrée", "Erreur");
                 return;
             }
-
             commande.IdSuivi = nouveauSuivi.Id;
             if (controller.ModifierSuiviCommande(commande))
             {
